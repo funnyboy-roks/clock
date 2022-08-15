@@ -7,7 +7,7 @@
     "distDir": "../public"
   },
   "package": {
-    "productName": "tauri-1",
+    "productName": "clock",
     "version": "0.1.0"
   },
   "tauri": {

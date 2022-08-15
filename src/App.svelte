@@ -1,12 +1,25 @@
 <script lang="ts">
-	import Clock from './Clock.svelte';
+	import Header from './Header.svelte';
 	import Todo from './Todo.svelte';
+	import Notes from './Notes.svelte';
+	import WorldClock from './WorldClock.svelte';
+
+	let selectedTab = 'todo';
 </script>
 
 <main>
-	<Clock />
+	<Header bind:selectedTab />
 
-	<Todo />
+	{#if selectedTab === 'todo'}
+		<Todo />
+	{:else if selectedTab === 'notes'}
+		<Notes />
+	{:else if selectedTab === 'clocks'}
+		<WorldClock />
+	{:else}
+		<div>No Tab Selected</div>
+	{/if}
+
 </main>
 
 <style>
