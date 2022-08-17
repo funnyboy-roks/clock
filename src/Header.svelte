@@ -4,9 +4,12 @@
 	import { faCircleCheck, faNoteSticky, faClock } from '@fortawesome/free-solid-svg-icons';
 	import { FontAwesomeIcon } from 'fontawesome-svelte';
 
-	export let selectedTab;
+	import Progress from './Progress.svelte';
+
+	export let selectedTab: string;
 
 	let date = writable(new Date());
+	let progressbars = false;
 
 	onMount(() => setInterval(() => date.set(new Date()), 500));
 
@@ -39,13 +42,18 @@
 </script>
 
 <div>
-	<h1>{$text.time}</h1>
-	<h2>{$text.date}</h2>
+	<div on:click={() => (progressbars = !progressbars)}>
+		{#if progressbars}
+			<Progress {date} />
+		{:else}
+			<h1>{$text.time}</h1>
+			<h2>{$text.date}</h2>
+		{/if}
+	</div>
 
 	<div id="tabs">
 		{#each tabs as tab, i (i)}
-			<button on:click|preventDefault={() => (selectedTab = tab.value)} class:selected={selectedTab === tab.value}>
-				<!-- {tab.name} -->
+			<button on:click|preventDefault={() => (selectedTab = tab.value)} class:selected={selectedTab === tab.value} title={tab.name}>
 				<FontAwesomeIcon icon={tab.icon} />
 			</button>
 		{/each}
@@ -53,7 +61,6 @@
 </div>
 
 <style>
-
 	#tabs button.selected {
 		/* color: var(--accent); */
 		color: #ff784b;
@@ -67,5 +74,4 @@
 		cursor: pointer;
 		font-size: 1.3rem;
 	}
-
 </style>

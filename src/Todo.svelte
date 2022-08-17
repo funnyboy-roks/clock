@@ -11,6 +11,7 @@
 
 	let todos = writable<Array<Todo>>([]);
 	let addTodoValue = '';
+	let elt: HTMLDivElement;
 
 	setTimeout(() => readTextFile('todos.json', { dir: BaseDirectory.App }).then(JSON.parse).then(todos.set), 100);
 
@@ -20,9 +21,13 @@
 		});
 
 	const addTodo = () => {
-		todos.update((t) => [{ text: addTodoValue, done: false }, ...t]);
+		todos.update((t) => [...t, { text: addTodoValue, done: false }]);
 		addTodoValue = '';
 		save();
+		setTimeout(() => elt.scrollTo({
+			top: elt.scrollHeight,
+			behavior: 'smooth',
+		}));
 	};
 
 	const updateTodo = (index: number, data: { done?: boolean; text?: string }) => () => {
@@ -37,7 +42,7 @@
 </script>
 
 <div class="todos">
-	<div class="todo-items">
+	<div class="todo-items" bind:this={elt}>
 		{#each $todos as { done, text }, i (i)}
 			<div class="todo" class:done transition:scale|local={{ start: 0.7 }} animate:flip={{ duration: 200 }}>
 				<form on:submit|preventDefault={updateTodo(i, { done: !done })}>
